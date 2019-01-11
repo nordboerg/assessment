@@ -4,9 +4,9 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
   entry: {
-    app: './src/ts/index.ts'
+    app: './src/app.ts'
   },
-  mode: 'production',
+  mode: 'development',
   devtool: 'inline-source-map',
   devServer: {
     contentBase: './dist'
