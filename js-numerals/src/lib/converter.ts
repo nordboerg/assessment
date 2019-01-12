@@ -18,26 +18,14 @@ export class Converter {
         const value = parseInt(segment, 10);
         const length = value.toString().length;
 
-        switch (length) {
-            case 3:
-                return this.getTriple(value);
-            case 2:
-                return this.getDouble(value);
-            case 1:
-                return this.getSingle(value);
-        }
-    }
-
-    getSingle(int: number): string {
-        return this.DIGITS.lt_21[int];
+        return length < 3 ? this.getDouble(value) : this.getTriple(value);
     }
 
     getDouble(int: number): string {
         if (int < 21) {
             return this.DIGITS.lt_21[int];
         } else if (int % 10 === 0) {
-            const initial = int.toString().slice(0, 1);
-            return this.DIGITS.round_doubles[initial];
+            return this.DIGITS.round_doubles[int / 10];
         } else {
             const parts = int.toString().split('');
             return this.DIGITS.round_doubles[parts[0]] + '-' + this.DIGITS.lt_21[parts[1]];
@@ -45,10 +33,11 @@ export class Converter {
     }
 
     getTriple(int: number): string {
-        const hundred = parseInt(int.toString().slice(0, 1), 10);
-        const rest = parseInt(int.toString().slice(1), 10);
+        const str = int.toString();
+        const hundred = parseInt(str.slice(0, 1), 10);
+        const rest = parseInt(str.slice(1), 10);
 
-        return `${this.getSingle(hundred)} hundred` +
+        return `${this.getDouble(hundred)} hundred` +
             (rest > 0 ? ` and ${this.getDouble(rest)}` : '');
     }
 
