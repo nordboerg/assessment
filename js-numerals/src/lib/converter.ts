@@ -1,16 +1,14 @@
-export class Converter {
-    constructor(
-        private DIGITS_LT_21: string[],
-        private ROUND_DOUBLES: string[],
-        private POSTFIX: string[]
-    ) { }
+import { Digits } from '../model/digits';
 
-    splitToTriples(value: string): string[] {
+export class Converter {
+    constructor(private DIGITS: Digits) { }
+
+    splitToSegments(value: string): string[] {
         return parseInt(value, 10).toLocaleString('en-US').split(',');
     }
 
     convertToString(value: string): string {
-        const segments = this.splitToTriples(value);
+        const segments = this.splitToSegments(value);
         const converted = segments.map(segment => this.convertSegment(segment));
 
         return this.formatResult(converted);
@@ -31,35 +29,36 @@ export class Converter {
     }
 
     getSingle(int: number): string {
-        return this.DIGITS_LT_21[int];
+        return this.DIGITS.lt_21[int];
     }
 
     getDouble(int: number): string {
         if (int < 21) {
-            return this.DIGITS_LT_21[int];
+            return this.DIGITS.lt_21[int];
         } else if (int % 10 === 0) {
             const initial = int.toString().slice(0, 1);
-            return this.ROUND_DOUBLES[initial];
+            return this.DIGITS.round_doubles[initial];
         } else {
             const parts = int.toString().split('');
-            return this.ROUND_DOUBLES[parts[0]] + '-' + this.DIGITS_LT_21[parts[1]];
+            return this.DIGITS.round_doubles[parts[0]] + '-' + this.DIGITS.lt_21[parts[1]];
         }
     }
 
     getTriple(int: number): string {
         const hundred = parseInt(int.toString().slice(0, 1), 10);
-        const rest = parseInt(int.toString().slice(1, 3), 10);
+        const rest = parseInt(int.toString().slice(1), 10);
 
         return `${this.getSingle(hundred)} hundred` +
             (rest > 0 ? ` and ${this.getDouble(rest)}` : '');
     }
 
     addPostfix(arr: string[]): string[] {
-        return arr.reverse().map((el, i) => i > 0 ? `${el} ${this.POSTFIX[i + 1]}` : el).reverse();
+        return arr.reverse().map((el, i) =>
+            i > 0 ? `${el} ${this.DIGITS.postfix[i + 1]}` : el).reverse();
     }
 
     formatResult(arr: string[]): string {
-        if (arr.length > 1 && arr[arr.length - 1].indexOf('and') === -1) {
+        if (arr.length > 1 && !arr[arr.length - 1].includes('and')) {
             arr[arr.length - 1] = 'and ' + arr[arr.length - 1];
         }
 

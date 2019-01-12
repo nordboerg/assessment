@@ -1,7 +1,7 @@
-import { Converter } from './ts/converter';
-import { DIGITS_LT_21, ROUND_DOUBLES, POSTFIX } from './ts/numerical-constants';
+import { Converter } from './lib/converter';
+import { DIGITS } from './model/numerical-constants';
 
-const converter = new Converter(DIGITS_LT_21, ROUND_DOUBLES, POSTFIX);
+const converter = new Converter(DIGITS);
 const submit = document.querySelector('button');
 const input = document.querySelector('input');
 const result = document.querySelector('.result-text');
