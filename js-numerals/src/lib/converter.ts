@@ -1,10 +1,20 @@
 import { Digits } from '../model/digits';
 
 export class Converter {
+    offset: number;
+
     constructor(private DIGITS: Digits) { }
 
     splitToSegments(value: string): string[] {
-        return parseInt(value, 10).toLocaleString('en-US').split(',');
+        const num = parseInt(value, 10);
+
+        if (num >= 1100 && num < 2000) {
+            this.offset = 0;
+            return [num.toString().slice(0, 2), num.toString().slice(2)];
+        } else {
+            this.offset = 1;
+            return num.toLocaleString('en-US').split(',');
+        }
     }
 
     convertToString(value: string): string {
@@ -43,7 +53,7 @@ export class Converter {
 
     addPostfix(arr: string[]): string[] {
         return arr.reverse().map((el, i) =>
-            i > 0 ? `${el} ${this.DIGITS.postfix[i + 1]}` : el).reverse();
+            i > 0 ? `${el} ${this.DIGITS.postfix[i + this.offset]}` : el).reverse();
     }
 
     formatResult(arr: string[]): string {
