@@ -58,4 +58,11 @@ export class Converter {
         return arr.reverse().map((el, i) => i > 0 ? `${el} ${this.POSTFIX[i + 1]}` : el).reverse();
     }
 
+    formatResult(arr: string[]): string {
+        if (arr.length > 1 && arr[arr.length - 1].indexOf('and') === -1) {
+            arr[arr.length - 1] = 'and ' + arr[arr.length - 1];
+        }
+
+        return this.addPostfix(arr).join(' ');
+    }
 }
