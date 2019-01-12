@@ -1,55 +1,61 @@
-import { DIGITS_LT_21, ROUND_DOUBLES, POSTFIX } from './numerical-constants';
+export class Converter {
+    constructor(
+        private DIGITS_LT_21: string[],
+        private ROUND_DOUBLES: string[],
+        private POSTFIX: string[]
+    ) { }
 
+    splitToTriples(value: string): string[] {
+        return parseInt(value, 10).toLocaleString('en-US').split(',');
+    }
 
-function splitToTriples(num: number): string[] {
-  return num.toLocaleString('en-US').split(',');
+    convertToString(value: string): string {
+        const segments = this.splitToTriples(value);
+        const converted = segments.map(segment => this.convertSegment(segment));
+
+        return this.formatResult(converted);
+    }
+
+    convertSegment(segment: string): string {
+        const value = parseInt(segment, 10);
+        const length = value.toString().length;
+
+        switch (length) {
+            case 3:
+                return this.getTriple(value);
+            case 2:
+                return this.getDouble(value);
+            case 1:
+                return this.getSingle(value);
+        }
+    }
+
+    getSingle(int: number): string {
+        return this.DIGITS_LT_21[int];
+    }
+
+    getDouble(int: number): string {
+        if (int < 21) {
+            return this.DIGITS_LT_21[int];
+        } else if (int % 10 === 0) {
+            const initial = int.toString().slice(0, 1);
+            return this.ROUND_DOUBLES[initial];
+        } else {
+            const parts = int.toString().split('');
+            return this.ROUND_DOUBLES[parts[0]] + '-' + this.DIGITS_LT_21[parts[1]];
+        }
+    }
+
+    getTriple(int: number): string {
+        const hundred = parseInt(int.toString().slice(0, 1), 10);
+        const rest = parseInt(int.toString().slice(1, 3), 10);
+
+        return `${this.getSingle(hundred)} hundred` +
+            (rest > 0 ? ` and ${this.getDouble(rest)}` : '');
+    }
+
+    addPostfix(arr: string[]): string[] {
+        return arr.reverse().map((el, i) => i > 0 ? `${el} ${this.POSTFIX[i + 1]}` : el).reverse();
+    }
+
 }
-
-function convertToString(value: string): string[] {
-  const segments = splitToTriples(parseInt(value, 10));
-
-  return segments.map(segment => convertSegment(segment));
-}
-
-function convertSegment(segment: string): string {
-  const value = parseInt(segment, 10);
-  const length = value.toString().length;
-
-  switch (length) {
-    case 3:
-      return getTriple(value);
-    case 2:
-      return getDouble(value);
-    case 1:
-      return getSingle(value);
-  }
-}
-
-function getSingle(int: number): string {
-  return DIGITS_LT_21[int];
-}
-
-function getDouble(int: number): string {
-  if (int < 21) {
-    return DIGITS_LT_21[int];
-  } else if (int % 10 === 0) {
-    const initial = parseInt(int.toString().slice(0, 1), 10);
-    return ROUND_DOUBLES[initial];
-  } else {
-    const parts = int.toString().split('');
-    return ROUND_DOUBLES[parts[0]] + '-' + DIGITS_LT_21[parts[1]];
-  }
-}
-
-function getTriple(int: number): string {
-  const hundred = parseInt(int.toString().slice(0, 1), 10);
-  const rest = parseInt(int.toString().slice(1, 3), 10);
-
-  return `${getSingle(hundred)} hundred` + (rest > 0 ? ` and ${getDouble(rest)}` : '');
-}
-
-function addPostfix(arr: string[]): string[] {
-  return arr.reverse().map((el, i) => i > 0 ? `${el} ${POSTFIX[i + 1]}` : el).reverse();
-}
-
-export { convertToString, addPostfix };
