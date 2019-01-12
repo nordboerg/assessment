@@ -58,10 +58,14 @@ export class Converter {
     }
 
     formatResult(arr: string[]): string {
-        if (arr.length > 1 && !arr[arr.length - 1].includes('and')) {
-            arr[arr.length - 1] = 'and ' + arr[arr.length - 1];
+        const last = arr.length - 1;
+
+        if (arr.length > 1 && !arr[last].includes('and')) {
+            arr[last] = `and ${arr[last]}`;
         }
 
-        return this.addPostfix(arr).join(' ');
+        return this.addPostfix(arr)
+            .filter((el, i, arr) => arr[0] === 'zero' || !el.includes('zero'))
+            .join(' ');
     }
 }
