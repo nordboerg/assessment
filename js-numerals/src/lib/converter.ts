@@ -5,6 +5,13 @@ export class Converter {
 
     constructor(private DIGITS: Digits) { }
 
+    convertToString(value: string): string {
+        const segments = this.splitToSegments(value);
+        const converted = segments.map(segment => this.convertSegment(segment));
+
+        return this.formatResult(converted);
+    }
+
     splitToSegments(value: string): string[] {
         const num = parseInt(value, 10);
 
@@ -15,13 +22,6 @@ export class Converter {
             this.offset = 1;
             return num.toLocaleString('en-US').split(',');
         }
-    }
-
-    convertToString(value: string): string {
-        const segments = this.splitToSegments(value);
-        const converted = segments.map(segment => this.convertSegment(segment));
-
-        return this.formatResult(converted);
     }
 
     convertSegment(segment: string): string {
