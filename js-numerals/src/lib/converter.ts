@@ -7,7 +7,7 @@ export class Converter {
 
   convertToWords(value: string): string {
     const segments = this.splitToSegments(value);
-    const converted = segments.map(segment => this.convertSegment(segment));
+    const converted = segments.map(segment => this.convertSegment(Number(segment)));
 
     return converted.length > 1 ? this.formatResult(converted) : converted[0];
   }
@@ -24,28 +24,24 @@ export class Converter {
     }
   }
 
-  convertSegment(segment: string): string {
-    const value = String(Number(segment));
-
-    return value.length < 3 ? this.getDouble(value) : this.getTriple(value);
+  convertSegment(segment: number): string {
+    return String(segment).length < 3 ? this.getDouble(segment) : this.getTriple(segment);
   }
 
-  getDouble(segment: string): string {
-    const num = Number(segment);
-
+  getDouble(num: number): string {
     if (num < 21) {
       return this.DIGITS.lt_21[num];
     } else if (num % 10 === 0) {
       return this.DIGITS.round_doubles[num / 10];
     } else {
-      const parts = segment.split('');
+      const parts = String(num).split('');
       return this.DIGITS.round_doubles[parts[0]] + '-' + this.DIGITS.lt_21[parts[1]];
     }
   }
 
-  getTriple(segment: string): string {
-    const hundred = segment.slice(0, 1);
-    const rest = segment.slice(1);
+  getTriple(num: number): string {
+    const hundred = Number(String(num).slice(0, 1));
+    const rest = Number(String(num).slice(1));
 
     return `${this.getDouble(hundred)} hundred` +
       (Number(rest) > 0 ? ` and ${this.getDouble(rest)}` : '');

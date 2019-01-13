@@ -50,7 +50,7 @@ describe("Converter", function() {
             // arrange
             const segments = converter.splitToSegments('16344002');
             // act
-            const words = converter.convertSegment(segments[1]);
+            const words = converter.convertSegment(Number(segments[1]));
             // assert
             expect(words).toEqual('three hundred and fourty-four');
         });
@@ -60,10 +60,10 @@ describe("Converter", function() {
             spyOn(converter, 'getTriple');
             const segments = converter.splitToSegments('634002');
             // act
-            converter.convertSegment(segments[0]);
+            converter.convertSegment(Number(segments[0]));
             // assert
             expect(converter.getTriple).toHaveBeenCalled();
-            expect(converter.getTriple).toHaveBeenCalledWith('634');
+            expect(converter.getTriple).toHaveBeenCalledWith(634);
         });
 
         it("should call getDouble if the segment is less than three digits long", function() {
@@ -71,19 +71,19 @@ describe("Converter", function() {
             spyOn(converter, 'getDouble');
             const segments = converter.splitToSegments('63002');
             // act
-            converter.convertSegment(segments[0]);
+            converter.convertSegment(Number(segments[0]));
             // assert
             expect(converter.getDouble).toHaveBeenCalled();
-            expect(converter.getDouble).toHaveBeenCalledWith('63');
+            expect(converter.getDouble).toHaveBeenCalledWith(63);
         });
     });
 
     describe("getDouble", function() {
         it("should return the words for single and double digits", function() {
             // act
-            const value1 = converter.getDouble('6');
-            const value2 = converter.getDouble('50');
-            const value3 = converter.getDouble('27');
+            const value1 = converter.getDouble(6);
+            const value2 = converter.getDouble(50);
+            const value3 = converter.getDouble(27);
             // assert
             expect(value1).toEqual('six');
             expect(value2).toEqual('fifty');
@@ -94,8 +94,8 @@ describe("Converter", function() {
     describe("getTriple", function() {
         it("should return the words for triple digits", function() {
             // act
-            const value1 = converter.getTriple('200');
-            const value2 = converter.getTriple('453');
+            const value1 = converter.getTriple(200);
+            const value2 = converter.getTriple(453);
             // assert
             expect(value1).toEqual('two hundred');
             expect(value2).toEqual('four hundred and fifty-three');
