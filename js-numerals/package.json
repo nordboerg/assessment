@@ -4,7 +4,7 @@
   "description": "Javascript/Frontend Programmer - Exercise 1\r =============================",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "karma start",
     "start": "webpack-dev-server --open",
     "build": "webpack --config webpack.config.js"
   },
@@ -12,11 +12,17 @@
   "author": "Norbert Gresku",
   "license": "ISC",
   "devDependencies": {
+    "@types/jasmine": "^3.3.5",
     "clean-webpack-plugin": "^1.0.0",
     "html-webpack-plugin": "^3.2.0",
+    "jasmine-core": "^3.3.0",
+    "karma": "^3.1.4",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-jasmine": "^2.0.1",
+    "karma-webpack": "^3.0.5",
     "ts-loader": "^5.3.3",
     "typescript": "^3.2.2",
-    "webpack": "^4.28.1",
+    "webpack": "^4.28.4",
     "webpack-cli": "^3.2.1",
     "webpack-dev-server": "^3.1.14"
   }
