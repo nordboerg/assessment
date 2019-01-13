@@ -9,5 +9,5 @@ const result = document.querySelector('.result-text');
 submit.addEventListener('click', onConvert);
 
 function onConvert(): void {
-    result.textContent = input.value ? converter.convertToWords(input.value) : '';
+  result.textContent = input.value ? converter.convertToWords(input.value) : '';
 }
