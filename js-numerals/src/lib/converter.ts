@@ -5,7 +5,7 @@ export class Converter {
 
     constructor(private DIGITS: Digits) { }
 
-    convertToString(value: string): string {
+    convertToWords(value: string): string {
         const segments = this.splitToSegments(value);
         const converted = segments.map(segment => this.convertSegment(segment));
 

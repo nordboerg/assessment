@@ -8,7 +8,7 @@ describe("Converter", function() {
         converter = new Converter(DIGITS);
     });
 
-    describe("convertToString", function() {
+    describe("convertToWords", function() {
         it("should convert the digits into words", function() {
             // arrange
             const data = [
@@ -25,10 +25,19 @@ describe("Converter", function() {
 
             data.forEach((item) => {
                 // act
-                const words = converter.convertToString(item.value);
+                const words = converter.convertToWords(item.value);
                 // assert
                 expect(words).toEqual(item.expected);
             })
+        });
+
+        it('should call splitToSegments', function () {
+            // arrange
+            spyOn(converter, 'formatResult');
+            // act
+            converter.convertToWords('5');
+            // assert
+            expect(converter.formatResult).toHaveBeenCalled();
         });
     });
 
@@ -52,6 +61,28 @@ describe("Converter", function() {
             const words = converter.convertSegment(segments[1]);
             // assert
             expect(words).toEqual('three hundred and fourty-four');
+        });
+
+        it("should call getTriple if the segment is three digits long", function() {
+            // arrange
+            spyOn(converter, 'getTriple');
+            const segments = converter.splitToSegments('634002');
+            // act
+            converter.convertSegment(segments[0]);
+            // assert
+            expect(converter.getTriple).toHaveBeenCalled();
+            expect(converter.getTriple).toHaveBeenCalledWith(634);
+        });
+
+        it("should call getDouble if the segment is less than three digits long", function() {
+            // arrange
+            spyOn(converter, 'getDouble');
+            const segments = converter.splitToSegments('63002');
+            // act
+            converter.convertSegment(segments[0]);
+            // assert
+            expect(converter.getDouble).toHaveBeenCalled();
+            expect(converter.getDouble).toHaveBeenCalledWith(63);
         });
     });
 
