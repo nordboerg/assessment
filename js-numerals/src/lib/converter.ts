@@ -54,8 +54,8 @@ export class Converter {
       .map((el, i) => i > 0 ? `${el} ${this.DIGITS.postfix[i + offset]}` : el)
       .reverse()
       .filter(el => !el.includes('zero'))
-      .reduce((result, curr, i) =>
-        result += i > 0 && !curr.includes('and') ? ` and ${curr}` : ` ${curr}`, '')
+      .reduce((result, curr, i, arr) =>
+        result += i === arr.length - 1 && !curr.includes('and') ? ` and ${curr}` : ` ${curr}`, '')
       .trim();
   }
 }

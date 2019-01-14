@@ -19,6 +19,7 @@ describe("Converter", function() {
                 { value: '17999', expected: 'seventeen thousand nine hundred and ninety-nine' },
                 { value: '625', expected: 'six hundred and twenty-five'},
                 { value: '16000005', expected: 'sixteen million and five' },
+                { value: '1100000002', expected: 'one billion one hundred million and two' },
                 { value: '36000', expected: 'thirty-six thousand' },
                 { value: '4572023', expected: 'four million five hundred and seventy-two thousand and twenty-three' },
                 { value: '0', expected: 'zero' }
