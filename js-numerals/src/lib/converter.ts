@@ -1,7 +1,7 @@
 import { Digits } from '../model/digits';
 
 export class Converter {
-  offset: number;
+  isSimplified: boolean;
 
   constructor(private DIGITS: Digits) { }
 
@@ -16,10 +16,10 @@ export class Converter {
     const num = Number(value);
 
     if (num >= 1100 && num < 2000) {
-      this.offset = 0;
+      this.isSimplified = true;
       return [String(num).slice(0, 2), String(num).slice(2)];
     } else {
-      this.offset = 1;
+      this.isSimplified = false;
       return num.toLocaleString('en-US').split(',');
     }
   }
@@ -47,16 +47,15 @@ export class Converter {
       (Number(rest) > 0 ? ` and ${this.getDouble(rest)}` : '');
   }
 
-  addPostfix(arr: string[]): string[] {
-    return arr.reverse()
-      .map((el, i) => i > 0 ? `${el} ${this.DIGITS.postfix[i + this.offset]}` : el)
-      .reverse();
-  }
+  formatResult(converted: string[]): string {
+    const offset = this.isSimplified ? 0 : 1;
 
-  formatResult(arr: string[]): string {
-    const last = arr.length - 1;
-    arr[last] = !arr[last].includes('and') ? `and ${arr[last]}` : arr[last];
-
-    return this.addPostfix(arr).filter(el => !el.includes('zero')).join(' ');
+    return converted.reverse()
+      .map((el, i) => i > 0 ? `${el} ${this.DIGITS.postfix[i + offset]}` : el)
+      .reverse()
+      .filter(el => !el.includes('zero'))
+      .reduce((result, curr, i) =>
+        result += i > 0 && !curr.includes('and') ? ` and ${curr}` : ` ${curr}`, '')
+      .trim();
   }
 }

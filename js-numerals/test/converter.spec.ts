@@ -102,30 +102,8 @@ describe("Converter", function() {
         });
     });
 
-    describe("addPostfix", function() {
-        it("should join the appropriate postfix to each segment", function() {
-            // arrange
-            converter.offset = 1;
-            // act
-            const arr = converter.addPostfix(['two', 'eight hundred and thirty-one', 'and ninety']);
-            // assert
-            expect(arr).toEqual(['two million', 'eight hundred and thirty-one thousand', 'and ninety']);
-        });
-
-        it("should join the appropriate postfix to each segment", function() {
-            // arrange
-            converter.offset = 0;
-            // act
-            const arr = converter.addPostfix(['thirteen', 'and zero']);
-            // assert
-            expect(arr).toEqual(['thirteen hundred', 'and zero']);
-        });
-    });
-
     describe("formatResult", function() {
         it("should join the segments into a sentence", function() {
-            // arrange
-            converter.offset = 1;
             // act
             const result = converter.formatResult(['fourty-two', 'five hundred and eighty']);
             // assert
@@ -133,8 +111,6 @@ describe("Converter", function() {
         });
 
         it("should add a preceeding 'and' before the last segment if it's missing", function() {
-            // arrange
-            converter.offset = 1;
             // act
             const result = converter.formatResult(['four hundred and twenty', 'two']);
             // assert
